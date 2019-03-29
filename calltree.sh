@@ -142,7 +142,7 @@ call_leaks() { local tfile=/tmp/graph_filter.$RANDOM
 }
 
 # wrap dot-format node and edge info with dot-format whole-graph description
-graph() { printf "digraph iftree {\ngraph [rankdir=LR, ratio=compress, concentrate=true];\nnode [shape=record, style=filled]\nedge [color="navy"];\n"; cat | sort -u; printf "}\n"; }
+graph() { printf "digraph iftree {\ngraph [\n rankdir=LR,\n ratio=compress,\n concentrate=true\n];\nnode [shape=record, style=filled]\nedge [color="navy"];\n"; cat | sort -u; printf "}\n"; }
 
 # filter out unwanted (as specified in “~/calltree.deny”) and/or unnecessary edges
 graph_filter() { local tfile=/tmp/graph_filter.$RANDOM
@@ -153,14 +153,17 @@ graph_filter() { local tfile=/tmp/graph_filter.$RANDOM
 }
 
 # how to invoke zgrviewer as a viewer
-zgrviewer() { ~/bin/zgrviewer -Pdot $@; }
+zgrviewer() { ~/Downloads/zgrviewer/run.sh -Pdot $@; }
 # how to invoke xfig as a viewer
 figviewer() { xfig <(dot -Tfig $@); }
 # how to create and view a png image
 pngviewer() { dot -Tpng $@ -o /tmp/ct.png && gqview -t /tmp/ct.png; }
 
 # specify a viewer
-ctviewer() { pngviewer $@; }
+ctviewer() { zgrviewer -opengl -volatile $@; }
+
+# cut&paste viewer
+ctview() { cat | graph > /tmp/tfile; ctviewer /tmp/tfile; }
 
 # add color to specified nodes
 colornodes() { (cat; for x in $@; do echo "$x [color=red]"; done;) }
