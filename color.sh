@@ -49,6 +49,9 @@ white()		{ all_reset fg_white $*; }
 
 RESET="\e[m"
 
+loc() { printf "\e[$1;$2H"; }
+erase() { printf "\e[2J"; }
+eraseall() { printf "\e[3J"; }
 repeat() { while echo; do $*; done; }
 repeatc() { printf "\033[2J"; while printf "\033[0;0f"; do $*; done; }
 
